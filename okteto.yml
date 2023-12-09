@@ -4,7 +4,7 @@ build:
 
 deploy:
   - helm upgrade --install contacts-service chart
-    --set contacts.image=${OKTETO_BUILD_CONACTS_SERVICE_IMAGE}
+    --set contacts.image=${OKTETO_BUILD_CONTACTS_SERVICE_IMAGE}
 
 dev:
   contacts-service:
