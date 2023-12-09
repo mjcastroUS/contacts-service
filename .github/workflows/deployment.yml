@@ -1,22 +1,27 @@
-name: Okteto deployment
-on: 
+name: Okteto Deployment
+
+on:
   push:
-    branches: [main]
-
-jobs: 
-  deploy: 
+    branches: [ main ]
+    
+jobs:
+  test:
+    uses: resinas/contacts-service/.github/workflows/tests.yml@main
+    
+  deploy:
+    needs: test
     runs-on: ubuntu-latest
-
+    
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Okteto login
-        uses: okteto/login@latest
-        with:
-          token: ${{ secrets.OKTETO_TOKEN }}
-
-      - name: Okteto deploy
-        uses: resinas/okteto-push@v1.0.2
-        with:
-          namespace: fis-app-resinas
-          build: true
+    - uses: actions/checkout@v2
+    
+    - name: Okteto Login
+      uses: okteto/login@latest
+      with:
+        token: ${{ secrets.OKTETO_TOKEN }}
+        
+    - name: Okteto Deploy
+      uses: resinas/okteto-push@v1.0.2
+      with:
+        namespace: fis-app-resinas
+        build: true
