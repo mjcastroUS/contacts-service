@@ -8,7 +8,8 @@ var debug = require('debug')('contacts-2:server');
 router.get('/', async function(req, res, next) {
   try {
     const result = await Contact.find();
-    res.send(result.map((c) => c.cleanup()));
+    //res.send(result.map((c) => c.cleanup()));
+    res.send(result);
   } catch(e) {
     debug("DB problem", e);
     res.sendStatus(500);

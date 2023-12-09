@@ -23,7 +23,7 @@ app.use('/api/v1/contacts', contactsRouter);
 //setup connnection
 const mongoose = require('mongoose');
 const DB_URL = (process.env.DB_URL || 'mongodb://localhost')
-
+//const DB_URL = "mongodb+srv://mjcastroperez:US2023mjcastro@contacts-service.pqnqw4u.mongodb.net/?retryWrites=true&w=majority" 
 console.log("connecting to database: %s", DB_URL);
 
 
