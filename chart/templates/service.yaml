@@ -1,9 +1,9 @@
 apiVersion: v1
-kind: service
+kind: Service
 metadata:
   name: contacts
   labels:
-    {{- include "contacts.label" . | nident 4}}
+    {{- include "contacts.labels" . | nident 4}}
   annotations:
     dev.okteto.com/auto-ingress: "true"
 spec:
