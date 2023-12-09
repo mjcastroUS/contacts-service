@@ -16,7 +16,7 @@ jobs:
           token: ${{ secrets.OKTETO_TOKEN }}
 
       - name: Okteto deploy
-        uses: mjcastroUS/okteto-push@v1.0.2
+        uses: resinas/okteto-push@v1.0.2
         with:
-          namespace: mjcastroUS
+          namespace: fis-app-resinas
           build: true
