@@ -1,54 +1,59 @@
 var express = require('express');
 var router = express.Router();
-
-//integramos el servicio externo, pasandole la ruta completa de nuestra llamada al servicio externo
 var fakesocial = require('../services/fakeservice');
-
-var contacts = [
-  {"name": "peter" , "phone": 1234},
-  {"name": "john" , "phone": 9874}
-
-]
+var Contact = require('../models/contact');
+var debug = require('debug')('contacts-2:server');
 
 /* GET contacts listing. */
-router.get('/', function(req, res, next) {
-  //res.send('respond with a resource');
-  res.send(contacts);
+router.get('/', async function(req, res, next) {
+  try {
+    const result = await Contact.find();
+    res.send(result.map((c) => c.cleanup()));
+  } catch(e) {
+    debug("DB problem", e);
+    res.sendStatus(500);
+  }
 });
-
 
 /* POST contact */
-router.post('/', function(req, res, next){
-  var contact = req.body;
-  contact.push(contact);
-  res.sendStatus(201);
+router.post('/', async function(req, res, next) {
+  const {name, phone} = req.body;
+
+  const contact = new Contact({
+    name, 
+    phone
+  });
+
+  try {
+    await contact.save();
+    return res.sendStatus(201);
+  } catch(e) {
+    if (e.errors) {
+      debug("Validation problem when saving");
+      res.status(400).send({error: e.message});
+    } else {
+      debug("DB problem", e);
+      res.sendStatus(500);
+    }
+  }
 });
 
-//tenemos que hacer asincrona la funcion get
-//router.get('/:name',  function (req, res, next){
-router.get('/:name', async function (req, res, next){
+/* GET contact/id */
+router.get('/:name', async function(req, res, next) {
   var name = req.params.name;
-  var result = contacts.find( c => {
+  var result = contacts.find(c => {
     return c.name === name;
   });
   var social = await fakesocial.getSocial(name);
 
-  if (result){
-    //res.send(result);
-    //añadimos al resultado lo que nos devuelve la llamada al servicio externo
-
+  if (result) {
     res.send({
       ...result,
       "social": social
-    })
-
-
-
-  }else{
-    res.send(404);
+    });
+  } else {
+    res.sendStatus(404);
   }
-  
-
 })
 
 module.exports = router;

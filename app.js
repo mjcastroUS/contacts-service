@@ -20,4 +20,16 @@ app.use(express.static(path.join(__dirname, 'public'))); //servir contenido stat
 app.use('/', indexRouter);
 app.use('/api/v1/contacts', contactsRouter);
 
+//setup connnection
+const mongoose = require('mongoose');
+const DB_URL = (process.env.DB_URL || 'mongodb://localhost')
+
+console.log("connecting to database: %s", DB_URL);
+
+
+mongoose.connect(DB_URL);
+const db = mongoose.connection;
+//recover from error
+db.on('error', console.error.bind(console, 'db connection error'));
+
 module.exports = app;
