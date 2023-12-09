@@ -8,6 +8,6 @@ deploy:
 
 dev:
   contacts-service:
-    command: nmp start
+    command: npm start
     sync:
       - .:/app
